@@ -6,6 +6,19 @@ $days = max(1, min(365, (int) ($_GET['days'] ?? 30)));
 $stmt = $pdo->prepare("SELECT c.id,c.name,c.phone,c.points,MAX(t.transaction_date) last_transaction,COUNT(t.id) transaction_count,COALESCE(SUM(t.total_amount),0) total_spend FROM customers c LEFT JOIN transactions t ON t.customer_id=c.id GROUP BY c.id HAVING last_transaction IS NULL OR last_transaction < DATE_SUB(NOW(), INTERVAL ? DAY) ORDER BY last_transaction ASC");
 $stmt->execute([$days]);
 $rows = $stmt->fetchAll();
+
+function wa_number(string $phone): string
+{
+    $n = preg_replace('/\D+/', '', $phone);
+    if ($n === '') return '';
+    if (strpos($n, '62') === 0) return $n;
+    if (strpos($n, '0') === 0) return '62' . substr($n, 1);
+    if (strpos($n, '8') === 0) return '62' . $n;
+    return $n;
+}
+
+$defaultMessage = "Halo kak {nama}, kami kangen nih! ☕\nSudah lama kakak tidak mampir. Yuk datang lagi, ada promo spesial untuk kakak. Poin kakak saat ini: {poin} poin.\nDitunggu kedatangannya ya, terima kasih!";
+
 $pageTitle = 'Promo Pelanggan Pasif';
 require 'includes/header.php';
 ?>
@@ -29,6 +42,7 @@ require 'includes/header.php';
     <div class="stat-card"><span>Pelanggan berpotensi promo</span><strong><?= count($rows) ?></strong><small>Ambang
             <?= $days ?> hari tanpa transaksi</small></div>
 </div>
+
 <div class="table-card mt-3">
     <div class="table-responsive">
         <table class="table align-middle">
@@ -40,12 +54,14 @@ require 'includes/header.php';
                     <th>Total pembelian</th>
                     <th>Poin</th>
                     <th>Transaksi terakhir</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody><?php if (!$rows): ?>
                     <tr>
-                        <td colspan="6" class="empty-state">Tidak ada pelanggan yang memenuhi kriteria saat ini.</td>
+                        <td colspan="7" class="empty-state">Tidak ada pelanggan yang memenuhi kriteria saat ini.</td>
                     </tr><?php endif; ?><?php foreach ($rows as $r): ?>
+                    <?php $wa = wa_number((string) $r['phone']); ?>
                     <tr>
                         <td><b><?= e($r['name']) ?></b></td>
                         <td><?= e($r['phone']) ?></td>
@@ -54,9 +70,29 @@ require 'includes/header.php';
                         <td><?= (int) $r['points'] ?></td>
                         <td><?= $r['last_transaction'] ? date('d M Y', strtotime($r['last_transaction'])) : 'Belum pernah transaksi' ?>
                         </td>
+                        <td>
+                            <?php if ($wa !== ''): ?>
+                                <button type="button" class="btn btn-sm btn-success btn-wa"
+                                    data-phone="<?= e($wa) ?>" data-name="<?= e($r['name']) ?>"
+                                    data-points="<?= (int) $r['points'] ?>">Kirim WhatsApp</button>
+                            <?php else: ?>
+                                <span class="text-muted">Nomor tidak valid</span>
+                            <?php endif; ?>
+                        </td>
                     </tr><?php endforeach; ?>
             </tbody>
         </table>
     </div>
 </div>
+<script>
+document.querySelectorAll('.btn-wa').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+        var tpl = document.getElementById('waTemplate').value;
+        var msg = tpl.replace(/\{nama\}/g, btn.dataset.name)
+                     .replace(/\{poin\}/g, btn.dataset.points);
+        var url = 'https://wa.me/' + btn.dataset.phone + '?text=' + encodeURIComponent(msg);
+        window.open(url, '_blank', 'noopener');
+    });
+});
+</script>
 <?php require 'includes/footer.php'; ?>

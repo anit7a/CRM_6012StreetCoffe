@@ -1050,11 +1050,6 @@ a:hover {
 }
 
 
-/* =====================================
-   LOGIN PAGE - LOGO DAN TEKS CENTER
-===================================== */
-
-/* Posisi logo dan nama brand */
 .login-brand-center {
     display: flex;
     flex-direction: column;
@@ -1065,7 +1060,6 @@ a:hover {
     margin-bottom: 35px;
 }
 
-/* Tampilan logo 6012 */
 .login-brand-center .login-logo {
     display: block;
     width: 100px;
@@ -1077,7 +1071,6 @@ a:hover {
     padding: 0;
 }
 
-/* Tulisan STREET COFFEE */
 .login-brand-center span {
     text-align: center;
     font-size: 13px;
@@ -1086,21 +1079,18 @@ a:hover {
     color: var(--brand-blue);
 }
 
-/* Judul Selamat Datang */
 .login-card h1 {
     text-align: center;
     color: var(--brand-navy);
     margin-bottom: 10px;
 }
 
-/* Deskripsi login */
 .login-card .muted {
     text-align: center;
     color: var(--muted);
     margin-bottom: 35px;
 }
 
-/* Ukuran login di HP */
 @media (max-width: 700px) {
     .login-brand-center .login-logo {
         width: 85px;
