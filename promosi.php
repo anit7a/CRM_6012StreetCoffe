@@ -7,6 +7,7 @@ $stmt = $pdo->prepare("SELECT c.id,c.name,c.phone,c.points,MAX(t.transaction_dat
 $stmt->execute([$days]);
 $rows = $stmt->fetchAll();
 
+/* Ubah nomor lokal (08xxx / +62xxx) menjadi format internasional untuk wa.me (62xxx) */
 function wa_number(string $phone): string
 {
     $n = preg_replace('/\D+/', '', $phone);
@@ -42,6 +43,7 @@ require 'includes/header.php';
     <div class="stat-card"><span>Pelanggan berpotensi promo</span><strong><?= count($rows) ?></strong><small>Ambang
             <?= $days ?> hari tanpa transaksi</small></div>
 </div>
+
 
 <div class="table-card mt-3">
     <div class="table-responsive">
@@ -87,7 +89,7 @@ require 'includes/header.php';
 <script>
 document.querySelectorAll('.btn-wa').forEach(function (btn) {
     btn.addEventListener('click', function () {
-        var tpl = document.getElementById('waTemplate').value;
+        var tpl = <?= json_encode($defaultMessage, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) ?>;
         var msg = tpl.replace(/\{nama\}/g, btn.dataset.name)
                      .replace(/\{poin\}/g, btn.dataset.points);
         var url = 'https://wa.me/' + btn.dataset.phone + '?text=' + encodeURIComponent(msg);
