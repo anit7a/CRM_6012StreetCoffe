@@ -4,10 +4,10 @@ Aplikasi CRM berbasis PHP Native + MySQL untuk berjalan di XAMPP. Frontend mengg
 
 ## Instalasi XAMPP
 1. Jalankan Apache dan MySQL dari XAMPP Control Panel.
-2. Salin folder `crm_6012_street_coffee` ke `C:\xampp\htdocs\`.
+2. Salin folder `crm_6012StreetCoffee` ke `C:\xampp\htdocs\`.
 3. Buka `http://localhost/phpmyadmin`.
-4. Pilih menu **Import**, unggah `database.sql`, lalu klik **Import** / **Go**.
-5. Buka `http://localhost/crm_6012_street_coffee/login.php`.
+4. Pilih menu **Import**, unggah `crm_6012.sql`, lalu klik **Import** / **Go**.
+5. Buka `http://localhost/crm_6012StreetCoffee/login.php`.
 6. Login awal: **username `admin`**, **password `admin123`**. Akun admin dibuat otomatis saat aplikasi pertama kali terhubung jika tabel `users` masih kosong.
 7. Sesuaikan konfigurasi host, database, username, dan password MySQL di `config/database.php` jika konfigurasi XAMPP berbeda.
 
@@ -21,7 +21,7 @@ Aplikasi CRM berbasis PHP Native + MySQL untuk berjalan di XAMPP. Frontend mengg
 - Laporan sederhana dan daftar pelanggan pasif (default 30 hari).
 
 ## Catatan
-- 20 pelanggan pada `database.sql` adalah **data simulasi/dummy**, bukan pelanggan asli.
+- 20 pelanggan pada `crm_6012.sql` adalah **data simulasi/dummy**, bukan pelanggan asli.
 - Data menu disimpan sebagai nama menu dan jumlah pembelian pada transaksi. Total pembayaran dimasukkan admin.
 - Promo pelanggan pasif adalah daftar identifikasi untuk tindak lanjut admin; pengiriman promo tidak dilakukan otomatis.
 - Penghapusan pelanggan tidak menghapus histori transaksi/keluhan; relasinya menjadi NULL agar catatan historis tetap ada.
