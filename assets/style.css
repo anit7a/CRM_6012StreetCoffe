@@ -1097,3 +1097,66 @@ a:hover {
         height: 85px;
     }
 }
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.main-content {
+    min-width: 0;
+    margin-left: 250px;
+    flex: 1;
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    height: 88px;
+    background: #FFFFFF;
+}
+
+@media (max-width: 1000px) and (min-width: 701px) {
+    .sidebar {
+        width: 220px;
+    }
+
+    .main-content {
+        margin-left: 220px;
+    }
+}
+
+@media (max-width: 700px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -260px;
+        bottom: 0;
+        width: 250px;
+        height: 100vh;
+        z-index: 1000;
+        transition: left 0.25s;
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        height: 76px;
+    }
+}
